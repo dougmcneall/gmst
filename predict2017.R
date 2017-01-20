@@ -1,5 +1,6 @@
 # predict2017.R
 # Predict 2017, using training data to 2016
+# Doug McNeall
 
 library(R2jags)
 
@@ -16,6 +17,7 @@ source('https://raw.githubusercontent.com/dougmcneall/gmst/master/load_gmst_data
 
 trainyears = 1892:2016
 predyears =  1892:2017
+# Offset the ENSO years, so that we get the last 6 months of last year's
 enso34years = 1891:2016
 
 # end of last year's ENSO

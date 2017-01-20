@@ -1,8 +1,10 @@
 # load_gmst_data.R
 # Load up all the data we might need to build an ARIMAX
 # model for global temperature prediction.
+# Doug McNeall
 
-gmt_predictions = read.table('/Users/dougmcneall/Documents/work/R/Rcode/useful/gmt_predictions.txt')
+gmt_predictions = read.table('https://raw.githubusercontent.com/dougmcneall/gmst/master/gmt_predictions.txt',
+                             head=TRUE)
 
 hadcrutfile = 'http://www.metoffice.gov.uk/hadobs/hadcrut4/data/current/time_series/HadCRUT.4.5.0.0.annual_ns_avg.txt'
 hadcrut_all = read.table(hadcrutfile)

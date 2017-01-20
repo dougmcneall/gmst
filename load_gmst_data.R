@@ -11,9 +11,10 @@ hadcrut_all = read.table(hadcrutfile)
 hadcrut = hadcrut_all[ , 1:2]
 colnames(hadcrut) = c('Year', 'Anomaly')
 
-predictors1 = read.table('/Users/dougmcneall/Documents/work/R/Rcode/useful/predictors1.txt',
+predictors1 = read.table('https://raw.githubusercontent.com/dougmcneall/gmst/master/predictors1.txt',
                          header=TRUE)
-predictors2 = read.table('/Users/dougmcneall/Documents/work/R/Rcode/useful/predictors2.txt', header=TRUE)
+predictors2 = read.table('https://raw.githubusercontent.com/dougmcneall/gmst/master/predictors2.txt',
+                         header=TRUE)
 
 # Nino3.4 from 1870 to 2016.
 nino34file='https://www.esrl.noaa.gov/psd/gcos_wgsp/Timeseries/Data/nino34.long.anom.data'

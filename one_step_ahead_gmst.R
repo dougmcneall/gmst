@@ -2,6 +2,7 @@
 # Do a one-step-ahead forecast of global mean surface 
 # temperature using an ARIMAX model, and compare it against
 # the Met Office prediction
+# Doug McNeall
 
 library(R2jags)
 

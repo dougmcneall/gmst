@@ -71,7 +71,7 @@ arimax_rmse = sqrt(mean((obs - osamean)^2))
 
 # Plot the Met Office and ARIMAX year-ahead prediction, along with the
 # observed data.
-dev.new()
+pdf(file="error_through_time.pdf", width = 6, height = 8)
 par(las=1, mar = c(5,4,2,1), mfrow = c(2,1))
 
 wmo.col = 'darkred'
@@ -105,8 +105,10 @@ segments(x0 = osayears, y0 = 0,
          col = 'tomato')
 legend('topleft', c('Met Office', 'ARIMAX'), col=c(mopred.col, arimax.col), pch=19,
        bty = 'n')
+dev.off()
 
 # x-y plot of predicted vs observed
+pdf(file = 'osa_xy.pdf', width = 6, height = 6)
 par(las = 1)
 plot(obs,osamean, pch=19, col=arimax.col,
      xlab='measured', ylab='predicted', bty = 'n', xlim = c(0.2,0.9), ylim = c(0.2,0.9) )
@@ -119,4 +121,5 @@ segments(x0 = gmt_predictions$WMO, y0 = gmt_predictions$LOWER,
 abline(0,1)
 legend('topleft', c('Met Office', 'ARIMAX'), col=c('tomato', 'skyblue2'), pch=19,
        bty = 'n')
+dev.off()
 

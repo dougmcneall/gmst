@@ -110,6 +110,7 @@ volc_col = 'grey'
 amo_col = 'purple'
 anth_col = 'blue'
 
+pdf(file='hiatus_forecast.pdf', width=5, height=5)
 lwd = 2.5
 par(mar = c(5,4,2,1), las=1)
 plot(hadcrut$Year[ix],hadcrut$Anomaly[ix], ylim=c(0.3,0.8), xlim=c(1995, 2022),
@@ -129,9 +130,10 @@ text(2016, tail(pred_no_anth_forc$mean,1), 'No Anthro', col=anth_col, pos=4)
 text(2015, 0.63, 'No AMO', col=amo_col, pos=4)
 text(2016, 0.8, 'No solar', col=solar_col, pos=4)
 text(2016, 0.75, 'No Volc', col=volc_col, pos=4)
+dev.off()
+
 
 # How much difference did each factor make?
-
 obs_target = tail(pred_all$mean,ny) 
 enso_effect = obs_target - tail(pred_no_nino$mean,ny)
 solar_effect = obs_target - tail(pred_no_solar$mean,ny)
@@ -141,11 +143,12 @@ anth_effect = obs_target - tail(pred_no_anth_forc$mean,ny)
 missing_effect = tail(hadcrut$Anomaly, ny) - obs_target
 
 target_years = 2000:2016
+pdf(file='effect_size.pdf', width=5, height=5)
 par(las = 1)
 lwd = 2.5
 plot(target_years, enso_effect, type='l', 
      col=enso_col, lwd = lwd, bty = 'n', ylim = c(-0.15, 0.25),
-     ylab = 'Effect size(degrees C)', xlab = 'Year')
+     ylab = 'Effect size (C)', xlab = 'Year')
 abline(h = 0)
 lines(target_years, solar_effect, col=solar_col, lwd=lwd)
 lines(target_years, volc_effect, col=volc_col, lwd = lwd)
@@ -159,5 +162,6 @@ text(2008, 0.2, 'Anthro', col=anth_col, pos=4)
 text(2011, 0.1, 'AMO', col=amo_col, pos=4)
 text(2006, 0.04, 'Solar', col=solar_col, pos=4)
 text(2011, 0.02, 'Volc', col=volc_col, pos=4)
+dev.off()
 
 

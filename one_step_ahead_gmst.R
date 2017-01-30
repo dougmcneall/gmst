@@ -58,6 +58,7 @@ for(i in 1:17){
   osamean[i] = tail(pred$mean,1)
   osaupper[i] = tail(pred$upper,1)
   osalower[i] = tail(pred$lower,1)
+  osarank[i] = rank.unc(pred$y[, ncol(pred$y)], obs[i])
 }
 
 # Basic prediction error statistics

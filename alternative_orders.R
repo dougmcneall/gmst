@@ -71,6 +71,51 @@ arimax_mae_101 = mean(abs(obs - osamean101))
 arimax_rmse_101 = sqrt(mean((obs - osamean101)^2))
 
 
+# setup containers for the predictions.
+osamean303 = rep(NA,15)
+osalower303 = rep(NA,15)
+osaupper303 = rep(NA,15)
+osarank303 = rep(NA,15)
+
+for(i in 1:(length(osayears))){
+  ny = 1
+  trainyears = 1892:((osayears[1] - 2)+i)
+  predyears = 1892:((osayears[1] - 2)+i+ny)
+  # offset enso by a year
+  enso34years = 1891:((osayears[1] - 3)+i+ny)
+  
+  # end of last year's ENSO
+  nino_pred = nino34ts[which(ninoyear%in%enso34years)]
+  
+  # last year's natural forcing and amo
+  nat_forc  = predictors2[which(predictors2$YEAR%in%predyears), c(4,5) ]
+  amo       = predictors2[which(predictors2$YEAR%in%enso34years), 2 ]
+  
+  # The projected anthropogenic forcing
+  anth_forc = predictors2[which(predictors2$YEAR%in%predyears), 6 ]
+  
+  # Temperature data for the training period
+  hadcrut_train = hadcrut[which(hadcrut$Year%in%trainyears), ]
+  
+  # Bind the exogenous variables together
+  xreg=cbind(nino_pred, as.matrix(cbind(nat_forc,amo,anth_forc)))
+  
+  pred = gmstARIMAX(model_code=arimax_code, xreg=xreg, hadcrut=hadcrut_train, ny=1,p=3, q=3)
+  
+  osamean303[i] = tail(pred$mean,1)
+  osaupper303[i] = tail(pred$upper,1)
+  osalower303[i] = tail(pred$lower,1)
+  osarank303[i] = rank.unc(pred$y[, ncol(pred$y)], obs[i])
+}
+
+# Basic prediction error statistics
+arimax_mae_303 = mean(abs(obs - osamean303))
+arimax_rmse_303 = sqrt(mean((obs - osamean303)^2))
+
+
+
+
+
 # Here is when the Moving Average term is zero 
 arimax_100_code = '
 model
@@ -383,11 +428,12 @@ pdf(file = 'orders.pdf', width = 8, height = 6)
 plot(osayears, obs, type = 'o', bty = 'n', col = 'black', pch = 19,
      xlab = 'Year', ylab = 'Anomaly')
 points(osayears,osamean_arima, type = 'o', col = 'purple', pch = 19)
+points(osayears,osamean303, type = 'o', col = 'pink', pch = 19)
 points(osayears,osamean101, type = 'o', col = 'red', pch = 19)
 points(osayears,osamean100, type = 'o', col = 'blue', pch = 19)
 points(osayears,osamean001, type = 'o', col = 'orange', pch = 19)
-legend('topleft', legend = c('obs', 'arima101', 'arimax101', 'arimax100', 'arimax 001'),
-       col = c('black', 'purple', 'red', 'blue', 'orange'),
+legend('topleft', legend = c('obs', 'arima101', 'arimax303', 'arimax101', 'arimax100', 'arimax001'),
+       col = c('black', 'purple','pink', 'red', 'blue', 'orange'),
        lty = 'solid',
        pch = 19)
 dev.off()

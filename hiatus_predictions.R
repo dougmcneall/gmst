@@ -164,4 +164,54 @@ text(2006, 0.04, 'Solar', col=solar_col, pos=4)
 text(2011, 0.02, 'Volc', col=volc_col, pos=4)
 dev.off()
 
+# ----------------------------------------------------------------
+# How much effect did each factor have on the linear trend in the 
+# period 2001 - 2013?
+# ----------------------------------------------------------------
+
+# predyears contains the correct year
+pauseyears = 2001:2013
+
+obs_pause = hadcrut$Anomaly[which(hadcrut$Year%in%pauseyears)]
+all_pause = pred_all$mean[which(predyears%in%pauseyears)]
+all_resid = obs_pause - all_pause
+missing_pause_effect = coef(lm(all_resid~pauseyears))[2] * length(pauseyears)
+
+no_anthro_pause = pred_no_anth_forc$mean[which(predyears%in%pauseyears)]
+no_anthro_resid =  all_pause - no_anthro_pause
+
+anthro_pause_effect = coef(lm(no_anthro_resid~pauseyears))[2] * length(pauseyears)
+
+no_solar_pause = pred_no_solar$mean[which(predyears%in%pauseyears)]
+no_solar_resid = all_pause - no_solar_pause
+solar_pause_effect = coef(lm(no_solar_resid~pauseyears))[2] * length(pauseyears)
+
+no_enso_pause = pred_no_nino$mean[which(predyears%in%pauseyears)]
+no_enso_resid = all_pause - no_enso_pause
+enso_pause_effect = coef(lm(no_enso_resid~pauseyears))[2] * length(pauseyears)
+
+no_volc_pause = pred_no_volc$mean[which(predyears%in%pauseyears)]
+no_volc_resid = all_pause - no_volc_pause
+volc_pause_effect = coef(lm(no_volc_resid~pauseyears))[2] * length(pauseyears)
+
+no_amo_pause = pred_no_amo$mean[which(predyears%in%pauseyears)]
+no_amo_resid = all_pause - no_amo_pause
+amo_pause_effect = coef(lm(no_amo_resid~pauseyears))[2] * length(pauseyears)
+
+
+pdf(file = 'pause_contribution.pdf', width=6, height=5)
+plot(1:6,c(amo_pause_effect, enso_pause_effect,
+           volc_pause_effect,solar_pause_effect,
+           anthro_pause_effect, missing_pause_effect ),
+     axes = FALSE, ylab = 'Trend contribution 2001-2013', xlab = '',
+     pch = 19, cex = 1.2
+     )
+axis(1, labels = c('AMO','ENSO', 'VOLC', 'SOLAR', 'ANTHRO', 'MISSING'), at = 1:6)
+axis(2)
+abline(h = 0, lty = 'dashed')
+dev.off()
+
+
+
+
 

@@ -82,7 +82,7 @@ for(i in 1:(length(osayears))){
   # curr_model = auto.arima(y = y,
   #                         xreg = xreg[1:length(y),])
   # Or use standard arima if you want to fix the parameters
-  curr_model = Arima(y = y,
+  curr_model = Arima(x = y,
                      xreg = xreg[1:length(y),],
                      order = c(2, 0, 2))
   #plot(curr_model) - optional

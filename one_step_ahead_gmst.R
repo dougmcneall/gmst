@@ -22,6 +22,8 @@ rank.unc = function(pred, obs){
 # ---------------------------------------------------------------------
 # One-step-ahead prediction for 2000 - 2016
 # ---------------------------------------------------------------------
+p = 2
+q = 2
 
 # setup containers for the predictions.
 osamean = rep(NA,17)
@@ -54,7 +56,8 @@ for(i in 1:17){
   # Bind the exogenous variables together
   xreg=cbind(nino_pred, as.matrix(cbind(nat_forc,amo,anth_forc)))
   
-  pred = gmstARIMAX(model_code=arimax_code, xreg=xreg, hadcrut=hadcrut_train, ny=1)
+  pred = gmstARIMAX(model_code=arimax_code, xreg=xreg, hadcrut=hadcrut_train,
+                    ny=1, p=p, q=q)
   
   osamean[i] = tail(pred$mean,1)
   osaupper[i] = tail(pred$upper,1)

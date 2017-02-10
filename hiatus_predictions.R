@@ -14,7 +14,8 @@ source('https://raw.githubusercontent.com/dougmcneall/gmst/master/load_gmst_data
 
 # Use temperature and forcing data up to 1999 to train the statistical
 # model, and predict the rest of the data, keeping one factor at a time flat.
-
+p = 2
+q = 2
 ny = 17
 trainyears = 1892:1999
 predyears = 1892:(1999+ny)
@@ -39,7 +40,8 @@ hadcrut_train = hadcrut[which(hadcrut$Year%in%trainyears), ]
 # Bind the exogenous variables together
 xreg_all=cbind(nino_pred, as.matrix(cbind(nat_forc,amo,anth_forc)))
 
-pred_all = gmstARIMAX(model_code=arimax_code, xreg=xreg_all, hadcrut=hadcrut_train, ny=ny)
+pred_all = gmstARIMAX(model_code=arimax_code, xreg=xreg_all,
+                      hadcrut=hadcrut_train, ny=ny, p=p, q=q)
 
 # --------------------------------------------------------
 # Replace the elements of xreg_all one-at-a-time
@@ -49,7 +51,7 @@ pred_all = gmstARIMAX(model_code=arimax_code, xreg=xreg_all, hadcrut=hadcrut_tra
 no_nino_pred = c(nino34ts[which(ninoyear%in%trainyears)], rep(0,ny))
 xreg_no_nino = cbind(no_nino_pred, as.matrix(cbind(nat_forc,amo,anth_forc)))
 pred_no_nino = gmstARIMAX(model_code=arimax_code, xreg=xreg_no_nino,
-                          hadcrut=hadcrut_train, ny=ny)
+                          hadcrut=hadcrut_train, ny=ny, p=p, q=q)
 
 # Replace Volcanic forcing with last value
 volc_train = predictors2[which(predictors2$YEAR%in%trainyears),4]
@@ -60,7 +62,7 @@ xreg_no_volc = xreg_all
 xreg_no_volc[, 'VOLC'] = volc
 
 pred_no_volc = gmstARIMAX(model_code=arimax_code, xreg=xreg_no_volc,
-                          hadcrut=hadcrut_train, ny=ny)
+                          hadcrut=hadcrut_train, ny=ny, p=p, q=q)
 
 
 # Replace Solar forcing with last value
@@ -72,7 +74,7 @@ xreg_no_solar = xreg_all
 xreg_no_solar[, 'SOLAR'] = solar
 
 pred_no_solar = gmstARIMAX(model_code=arimax_code, xreg=xreg_no_solar,
-                          hadcrut=hadcrut_train, ny=ny)
+                          hadcrut=hadcrut_train, ny=ny, p=p, q=q)
 
 
 # Replace AMO with last value
@@ -83,7 +85,7 @@ xreg_no_amo = xreg_all
 xreg_no_amo[, 'amo'] = amo_flat
 
 pred_no_amo = gmstARIMAX(model_code=arimax_code, xreg=xreg_no_amo,
-                           hadcrut=hadcrut_train, ny=ny)
+                           hadcrut=hadcrut_train, ny=ny, p=p, q=q)
 
 # replace anthropogenic forcing
 anth_forc_train = predictors2[which(predictors2$YEAR%in%trainyears), 6 ]
@@ -94,7 +96,7 @@ xreg_no_anth_forc = xreg_all
 xreg_no_anth_forc[, 'anth_forc'] = anth_forc_flat
 
 pred_no_anth_forc = gmstARIMAX(model_code=arimax_code, xreg=xreg_no_anth_forc,
-                         hadcrut=hadcrut_train, ny=ny)
+                         hadcrut=hadcrut_train, ny=ny, p=p, q=q)
 
 # -------------------------------------------------------
 # Plot the results

@@ -112,12 +112,12 @@ volc_col = 'grey'
 amo_col = 'purple'
 anth_col = 'blue'
 
-pdf(file='hiatus_forecast.pdf', width=5, height=5)
+pdf(file='hiatus_forecast.pdf', width=7, height=5)
 lwd = 2.5
 par(mar = c(5,4,2,1), las=1)
-plot(hadcrut$Year[ix],hadcrut$Anomaly[ix], ylim=c(0.3,0.8), xlim=c(1995, 2022),
+plot(hadcrut$Year[ix],hadcrut$Anomaly[ix], ylim=c(0.2,0.8), xlim=c(1995, 2022),
      type='n', bty='n', lwd=lwd, ylab='Temperature Anomaly (C)', xlab='year')
-lines(hadcrut$Year[ix], pred_all$mean, col=all_col, lwd=lwd)
+lines(hadcrut$Year[ix], pred_all$mean, col=all_col, lwd=2*lwd)
 lines(hadcrut$Year[ix], pred_no_nino$mean, col=enso_col, lwd=lwd)
 lines(hadcrut$Year[ix], pred_no_solar$mean, col=solar_col, lwd=lwd)
 lines(hadcrut$Year[ix], pred_no_volc$mean, col=volc_col, lwd=lwd)
@@ -125,13 +125,13 @@ lines(hadcrut$Year[ix], pred_no_amo$mean, col=amo_col, lwd=lwd)
 lines(hadcrut$Year[ix], pred_no_anth_forc$mean, col=anth_col, lwd=lwd)
 lines(hadcrut$Year[ix],hadcrut$Anomaly[ix], col = obs_col, lwd = lwd)
 
-text(2015, 0.78 , 'HADCRUT4', col=obs_col, pos=2)
-text(2013,0.67, 'No ENSO', col=enso_col, pos=2)
+text(2015, 0.74 , 'HADCRUT4', col=obs_col, pos=2)
+text(2013,0.63, 'No ENSO', col=enso_col, pos=2)
 text(2005, 0.57, 'All', col=all_col, pos=2)
 text(2016, tail(pred_no_anth_forc$mean,1), 'No Anthro', col=anth_col, pos=4)
-text(2015, 0.63, 'No AMO', col=amo_col, pos=4)
-text(2016, 0.8, 'No solar', col=solar_col, pos=4)
-text(2016, 0.75, 'No Volc', col=volc_col, pos=4)
+text(2016, 0.6, 'No AMO', col=amo_col, pos=4)
+text(2016, 0.71, 'No solar', col=solar_col, pos=4)
+text(2016, 0.68, 'No Volc', col=volc_col, pos=4)
 dev.off()
 
 

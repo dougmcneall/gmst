@@ -9,27 +9,27 @@ model
 {
   # Set up residuals
   for(t in 1:q) {
-  eps[t] <- y[t] - alpha
+    eps[t] <- y[t] - alpha
   }
   # Likelihood
   for (t in (q+1):T) {
-  y[t] ~ dnorm(alpha + ar_mean[t] + ma_mean[t] + reg_mean[t], tau)
-  ma_mean[t] <- inprod(theta, eps[(t-q):(t-1)])
-  ar_mean[t] <- inprod(phi, y[(t-p):(t-1)])
-  reg_mean[t] <- inprod(beta, x[t,])
-  eps[t] <- y[t] - alpha - ar_mean[t] - ma_mean[t] - reg_mean[t]
-  }
+    y[t] ~ dnorm(alpha + ar_mean[t] + ma_mean[t] + reg_mean[t], tau)
+    ma_mean[t] <- inprod(theta, eps[(t-q):(t-1)])
+    ar_mean[t] <- inprod(phi, y[(t-p):(t-1)])
+    reg_mean[t] <- inprod(beta, x[t,])
+    eps[t] <- y[t] - alpha - ar_mean[t] - ma_mean[t] - reg_mean[t]
+    }
   
   # Priors
   alpha ~ dnorm(0.0,0.01)
   for (i in 1:q) {
-  theta[i] ~ dnorm(0.0,0.01)
+    theta[i] ~ dnorm(0.0,0.01)
   }
   for(i in 1:p) {
-  phi[i] ~ dnorm(0.0,0.01)
+    phi[i] ~ dnorm(0.0,0.01)
   }
   for(i in 1:k) {
-  beta[i] ~ dnorm(0.0,0.01)
+    beta[i] ~ dnorm(0.0,0.01)
   }
   tau <- 1/pow(sigma,2) # Turn precision into standard deviation
   sigma ~ dunif(0.0,10.0)
